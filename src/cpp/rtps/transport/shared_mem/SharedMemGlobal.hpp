@@ -230,14 +230,14 @@ public:
                 : wake_run_(false)
                 , exit_thread_(false)
             {
-                thread_run_ = std::thread(&Watchdog::run, this);
+                //thread_run_ = std::thread(&Watchdog::run, this);
             }
 
             ~Watchdog()
             {
                 exit_thread_ = true;
-                wake_up();
-                thread_run_.join();
+                /*wake_up();
+                thread_run_.join();*/
             }
 
             bool update_status_all_listeners(
@@ -528,7 +528,12 @@ public:
                 status.counter = status.last_verified_counter + 1;
                 node_->waiting_count++;
 
-                do
+                node_->empty_cv.wait(lock, [&]
+                    {
+                        return is_listener_closed.load() || listener.head() != nullptr;
+                    });
+
+                /*do
                 {
                     boost::system_time const timeout =
                             boost::get_system_time()+ boost::posix_time::milliseconds(node_->port_wait_timeout_ms);
@@ -549,7 +554,7 @@ public:
 
                         status.counter = status.last_verified_counter + 1;
                     }
-                } while (1);
+                } while (1);*/
 
                 node_->waiting_count--;
                 status.is_waiting = 0;

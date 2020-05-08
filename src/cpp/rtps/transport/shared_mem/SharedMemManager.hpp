@@ -529,7 +529,7 @@ public:
             while(it != allocated_buffers_.end())
             {
                 // There is enough space to allocate the buffer
-                if (free_bytes_ >= required_data_size)
+                //if (free_bytes_ >= required_data_size)
                 {
                     if ((*it)->is_not_referenced())
                     {
@@ -545,7 +545,7 @@ public:
                         it++;
                     }
                 }
-                else // No enough space, try to recover oldest not processing buffers
+                /*else // No enough space, try to recover oldest not processing buffers
                 {
                     // Buffer is not beign processed by any listener
                     if ((*it)->invalidate_if_not_processing())
@@ -559,7 +559,7 @@ public:
                     {
                         it++;
                     }
-                }
+                }*/
             }
 
             return free_bytes_ >= required_data_size;
